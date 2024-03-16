@@ -15,4 +15,4 @@ Key features:
 
 - [ ] Html
 - [ ] Pdf
-- [ ] MS World
+- [ ] MS Word
