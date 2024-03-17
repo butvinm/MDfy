@@ -1,8 +1,11 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (button, div, h1, main_, text)
+import Editor
+import Html exposing (a, div, main_, text)
+import Html.Attributes exposing (attribute, class)
 import Html.Events exposing (onClick)
+import Preview
 
 
 
@@ -28,12 +31,20 @@ type Panel
 
 
 type alias Model =
-    { panel : Panel }
+    { panel : Panel
+    , preview : Preview.Model
+    , editor : Editor.Model
+    }
 
 
 init : () -> ( Model, Cmd Msg )
 init flags =
-    ( Model Editor, Cmd.none )
+    ( { panel = Editor
+      , preview = Preview.init flags
+      , editor = Editor.init flags
+      }
+    , Cmd.none
+    )
 
 
 
@@ -42,18 +53,22 @@ init flags =
 
 type Msg
     = ChangePanel Panel
+    | PreviewMsg Preview.Msg
+    | EditorMsg Editor.Msg
     | None
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        _ = Debug.log (Debug.toString msg)
+    in
     case msg of
         ChangePanel panel ->
             ( { model | panel = panel }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
-
 
 
 -- SUBSCRIPTIONS
@@ -69,21 +84,29 @@ subscriptions model =
 
 
 view : Model -> Browser.Document Msg
-view { panel } =
+view { panel, preview, editor } =
     { title = "MDfy"
     , body =
         [ main_ []
-            [ div []
-                [ button [ onClick (ChangePanel Editor) ] [ text "Editor" ]
-                , button [ onClick (ChangePanel Preview) ] [ text "Preview" ]
+            [ div [ attribute "class" "tabs" ]
+                [ a
+                    [ class (if panel == Editor then "active" else "")
+                    , onClick (ChangePanel Editor)
+                    ]
+                    [ text "Editor" ]
+                , a
+                    [ class (if panel == Preview then "active" else "")
+                    , onClick (ChangePanel Preview)
+                    ]
+                    [ text "Preview" ]
                 ]
             , div []
                 [ case panel of
                     Editor ->
-                        h1 [] [ text "Editor" ]
+                        Html.map EditorMsg (Editor.view editor)
 
                     Preview ->
-                        h1 [] [ text "Preview" ]
+                        Html.map PreviewMsg (Preview.view preview)
                 ]
             ]
         ]
