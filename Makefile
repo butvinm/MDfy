@@ -4,11 +4,11 @@ $(DIST_DIR):
 	@mkdir -p $@
 
 compile: $(DIST_DIR)
-	elm make src/Main.elm --output=dist/main.js
+	elm make src/Main.elm --output=$(DIST_DIR)/main.js
 
 package: compile $(DIST_DIR)
 	cp src/index.html dist/index.html
 
-open:
-	@echo "Go to http://localhost:8000/dist/index.html"
-	@elm reactor > /dev/null
+dev:
+	@make package
+	elm-live src/Main.elm --dir=$(DIST_DIR) --open -- --output=$(DIST_DIR)/main.js
