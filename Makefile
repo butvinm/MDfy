@@ -7,7 +7,7 @@ compile: $(DIST_DIR)
 	elm make src/Main.elm --output=$(DIST_DIR)/main.js
 
 package: compile $(DIST_DIR)
-	cp src/index.html dist/index.html
+	cp src/index.html $(DIST_DIR)/index.html
 
 dev:
 	@make package
