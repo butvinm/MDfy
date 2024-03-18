@@ -1,4 +1,4 @@
-# MDfy
+# mdfy
 
 ```elm
 mdfy : Markdown -> anything
