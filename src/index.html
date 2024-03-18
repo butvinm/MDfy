@@ -8,10 +8,27 @@
 
         <!-- Elm -->
         <script src="main.js"></script>
+
+        <!-- Highlight.js -->
+        <script src="./highlight.min.js"></script>
+        <script src="./markdown.min.js"></script>
+        <link href="./mono-blue.min.css" rel="stylesheet" />
     </head>
     <body>
         <script>
             var app = Elm.Main.init();
+        </script>
+
+        <script type="module">
+            import { CodeJar } from "./codejar.js";
+
+            const highlight = (editor) => {
+                editor.textContent = editor.textContent;
+                hljs.highlightBlock(editor);
+            };
+
+            const editor = document.getElementById("editor");
+            const jar = CodeJar(editor, highlight);
         </script>
     </body>
 </html>

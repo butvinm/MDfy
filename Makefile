@@ -8,6 +8,7 @@ compile: $(DIST_DIR)
 
 package: compile $(DIST_DIR)
 	cp src/index.html $(DIST_DIR)/index.html
+	cp lib/* $(DIST_DIR)/
 
 dev:
 	@make package
