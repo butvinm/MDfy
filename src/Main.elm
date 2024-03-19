@@ -1,9 +1,11 @@
 module Main exposing (..)
 
 import Browser
+import Debug exposing (toString)
+import Dict exposing (Dict)
 import Editor
-import Html exposing (a, div, main_, text)
-import Html.Attributes exposing (attribute, class)
+import Html exposing (Html, a, div, main_, text)
+import Html.Attributes exposing (attribute, class, style)
 import Html.Events exposing (onClick)
 import Preview
 
@@ -31,7 +33,7 @@ type Panel
 
 
 type alias Model =
-    { panel : Panel
+    { activePanel : Panel
     , preview : Preview.Model
     , editor : Editor.Model
     }
@@ -39,7 +41,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init flags =
-    ( { panel = Editor
+    ( { activePanel = Editor
       , preview = Preview.init flags
       , editor = Editor.init flags
       }
@@ -61,14 +63,16 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        _ = Debug.log (Debug.toString msg)
+        _ =
+            Debug.log (Debug.toString msg)
     in
     case msg of
         ChangePanel panel ->
-            ( { model | panel = panel }, Cmd.none )
+            ( { model | activePanel = panel }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS
@@ -84,29 +88,41 @@ subscriptions model =
 
 
 view : Model -> Browser.Document Msg
-view { panel, preview, editor } =
+view { activePanel, preview, editor } =
     { title = "MDfy"
     , body =
-        [ main_ []
-            [ div [ attribute "class" "tabs" ]
+        [ main_
+            [ style "display" "flex"
+            , style "flex-direction" "column"
+            , style "height" "100vh"
+            ]
+            [ div [ class "tabs" ]
                 [ a
-                    [ class (if panel == Editor then "active" else "")
-                    , onClick (ChangePanel Editor)
-                    ]
+                    (List.concat
+                        [ if activePanel == Editor then [ class "active" ] else []
+                        , [ onClick (ChangePanel Editor) ]
+                        ]
+                    )
                     [ text "Editor" ]
                 , a
-                    [ class (if panel == Preview then "active" else "")
-                    , onClick (ChangePanel Preview)
-                    ]
+                    (List.concat
+                        [ if activePanel == Preview then [ class "active" ] else []
+                        , [ onClick (ChangePanel Preview) ]
+                        ]
+                    )
                     [ text "Preview" ]
                 ]
-            , div []
-                [ case panel of
-                    Editor ->
-                        Html.map EditorMsg (Editor.view editor)
-
-                    Preview ->
-                        Html.map PreviewMsg (Preview.view preview)
+            , div [ style "flex-grow" "1" ]
+                [ div
+                    (List.concat
+                        [ if activePanel /= Editor then [ style "display" "none" ] else [] ]
+                    )
+                    [ Html.map EditorMsg (Editor.view editor) ]
+                , div
+                    (List.concat
+                        [ if activePanel /= Preview then [ style "display" "none" ] else [] ]
+                    )
+                    [ Html.map PreviewMsg (Preview.view preview) ]
                 ]
             ]
         ]
