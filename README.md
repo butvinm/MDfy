@@ -4,7 +4,7 @@
 mdfy : Markdown -> anything
 ```
 
-**MDfy** is Markdown converter to various file formats.
+**mdfy** is Markdown converter to various file formats.
 
 Key features:
 - Converting customization for each possible Markdown entity

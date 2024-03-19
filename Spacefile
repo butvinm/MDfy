@@ -5,4 +5,5 @@ micros:
     src: dist
     engine: static
     primary: true
+    public: true
     serve: .
