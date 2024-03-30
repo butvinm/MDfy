@@ -1,7 +1,7 @@
 module Editor exposing (..)
 
-import Css exposing (height, pct)
-import Html.Styled exposing (Html, div, text)
+import Css exposing (block, display, height, pct)
+import Html.Styled exposing (Html, node, text)
 import Html.Styled.Attributes exposing (attribute, class, css, id)
 
 
@@ -10,12 +10,12 @@ import Html.Styled.Attributes exposing (attribute, class, css, id)
 
 
 type alias Model =
-    {}
+    { content : String }
 
 
-init : () -> Model
-init _ =
-    {}
+init : String -> Model
+init content =
+    { content = content }
 
 
 
@@ -32,28 +32,11 @@ type Msg
 
 
 view : Model -> Html Msg
-view _ =
-    div
+view { content } =
+    node "mdfy-editor"
         [ id "editor"
         , class "language-markdown"
         , attribute "data-gramm" "false"
-        , css [ height (pct 100) ]
+        , css [ display block, height (pct 100) ]
         ]
-        [ text """
-# mdfy
-
-```elm
-mdfy : Markdown -> anything
-```
-
-**mdfy** is Markdown converter to various file formats.
-
-Key features:
-- Converting customization for each possible Markdown entity
-- Local links support (ability to upload necessary files)
-- It is written in [Elm](https://elm-lang.org/)
-
-## Demo
-
-You can check [Live Demo](https://mdfy-1-w0253200.deta.app/) for the latest code version.
-        """ ]
+        [ text content ]

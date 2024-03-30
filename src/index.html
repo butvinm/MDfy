@@ -19,16 +19,6 @@
             var app = Elm.Main.init();
         </script>
 
-        <script type="module" defer>
-            import { CodeJar } from "./codejar.js";
-
-            const highlight = (editor) => {
-                editor.textContent = editor.textContent;
-                hljs.highlightBlock(editor);
-            };
-
-            const editor = document.getElementById("editor");
-            const jar = CodeJar(editor, highlight);
-        </script>
+        <script type="module" src="./editor.js" defer></script>
     </body>
 </html>
