@@ -1,7 +1,6 @@
 module Preview exposing (..)
 
-import Html exposing (Html, button, div, h1, main_, text)
-import Html.Events exposing (onClick)
+import Html.Styled exposing (Html, text)
 
 
 
@@ -13,7 +12,7 @@ type alias Model =
 
 
 init : () -> Model
-init flags =
+init _ =
     {}
 
 
@@ -30,5 +29,5 @@ type Msg
 
 
 view : Model -> Html Msg
-view model =
+view _ =
     text "Preview"

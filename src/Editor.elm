@@ -1,7 +1,8 @@
 module Editor exposing (..)
 
-import Html exposing (Html, div, text)
-import Html.Attributes exposing (attribute, class, id, style)
+import Css exposing (height, pct)
+import Html.Styled exposing (Html, div, text)
+import Html.Styled.Attributes exposing (attribute, class, css, id)
 
 
 
@@ -13,7 +14,7 @@ type alias Model =
 
 
 init : () -> Model
-init flags =
+init _ =
     {}
 
 
@@ -31,12 +32,12 @@ type Msg
 
 
 view : Model -> Html Msg
-view model =
+view _ =
     div
         [ id "editor"
         , class "language-markdown"
         , attribute "data-gramm" "false"
-        , style "height" "100%"
+        , css [ height (pct 100) ]
         ]
         [ text """
 # mdfy
